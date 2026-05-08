@@ -1,0 +1,25 @@
+# Build Maven
+target/
+
+# JAR files
+*.jar
+*.war
+*.ear
+
+# Maven wrapper logs
+.mvn/
+
+# IntelliJ / VSCode
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local MySQL data
+mysql_data/
+
+# Logs
+*.log
