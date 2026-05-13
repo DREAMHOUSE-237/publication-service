@@ -55,6 +55,10 @@ public class BienImmobilier {
 
     private LocalDateTime datePublication;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TypeBienImmobilier typeBienImmobilier;
+
     @PrePersist
     protected void onCreate() {
         this.datePublication = LocalDateTime.now();
@@ -127,4 +131,13 @@ public class BienImmobilier {
 
     public String getNumeroPaiement() { return numeroPaiement; }
     public void setNumeroPaiement(String numeroPaiement) { this.numeroPaiement = numeroPaiement; }
+
+    public TypeBienImmobilier getTypeBienImmobilier(){
+        return typeBienImmobilier;
+    }
+
+    public void setTypeBienImmobilier(TypeBienImmobilier typeBienImmobilier){
+        this.typeBienImmobilier=typeBienImmobilier;
+    }
+
 }

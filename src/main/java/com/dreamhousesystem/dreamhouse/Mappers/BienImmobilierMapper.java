@@ -45,7 +45,8 @@ public class BienImmobilierMapper {
                 bien.getAdresse() != null ? bien.getAdresse().getQuartier() : null,
                 bien.getAdresse()!= null ? bien.getAdresse().getLattitude(): null,
                 bien.getAdresse()!=null ? bien.getAdresse().getLongitude():null,
-                bien.getTypePublication(),
+                bien.getTypePublication()!=null ? bien.getTypePublication():null,
+                bien.getTypeBienImmobilier()!=null ? bien.getTypeBienImmobilier():null,
                 bien.getDatePublication(),
                 imageUrls,
                 documentUrls,
@@ -64,6 +65,7 @@ public class BienImmobilierMapper {
         bien.setCategorie(dto.categorie());
         bien.setPrix(dto.prix());
         bien.setTypePublication(dto.typePublication());
+        bien.setTypeBienImmobilier(dto.typeBienImmobilier());
         bien.setImages(dto.images());
         bien.setDocuements(dto.docuements());
         bien.setNumeroPaiement(dto.numeroPaiement());
@@ -74,6 +76,8 @@ public class BienImmobilierMapper {
         bien.getAdresse().setVille(dto.ville());
         bien.getAdresse().setRegion(dto.region());
         bien.getAdresse().setQuartier(dto.quartier());
+        bien.getAdresse().setLattitude(dto.lattitude());
+        bien.getAdresse().setLongitude(dto.longitude());
 
         return bien;
     }
