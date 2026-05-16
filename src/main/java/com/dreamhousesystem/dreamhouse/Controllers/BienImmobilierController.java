@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/biens")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class BienImmobilierController {
 
     private final BienImmobilierService service;
