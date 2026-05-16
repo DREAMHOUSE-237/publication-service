@@ -3,6 +3,7 @@ com/dreamhousesystem/dreamhouse/Controllers/BienImmobilierController.class
 com/dreamhousesystem/dreamhouse/DTO/StatistiqueDTO.class
 com/dreamhousesystem/dreamhouse/Services/StatistiqueService.class
 com/dreamhousesystem/dreamhouse/Entities/TypePublication.class
+com/dreamhousesystem/dreamhouse/Services/CloudinaryService.class
 com/dreamhousesystem/dreamhouse/exception/UnsupportedFileTypeException.class
 com/dreamhousesystem/dreamhouse/Mappers/BienImmobilierMapper.class
 com/dreamhousesystem/dreamhouse/Services/EmailService.class

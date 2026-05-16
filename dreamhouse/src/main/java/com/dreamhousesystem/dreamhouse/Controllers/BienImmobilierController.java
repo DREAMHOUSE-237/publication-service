@@ -29,7 +29,7 @@ public class BienImmobilierController {
         this.fileStorageService = fileStorageService;
     }
 
-    // Creation d’un bien avec images et documents
+    // Creation d’un bien avec ses images et ses documents
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<BienImmobilierDTO> createBien(
             @RequestPart("bien") BienImmobilier bien,

@@ -1,26 +1,37 @@
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Config/RabbitMQConfig.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Config/WebConfig.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Controllers/BienImmobilierController.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Controllers/StatistiqueController.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/DTO/BienImmobilierDTO.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/DTO/StatistiqueDTO.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/DreamhouseApplication.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/Adresse.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/BienImmobilier.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/Categorie.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/TypePublication.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Mappers/BienImmobilierMapper.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/PaymentProducer.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/PaymentRequestMessage.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/UserEmailConsumer.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/UserEmailMessage.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Repositories/BienImmobilierRepository.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/BienImmobilierService.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/BienImmobilierServiceImpl.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/EmailService.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/FileStorageService.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/StatistiqueService.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/exception/GlobalExceptionHandler.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/exception/UnsupportedFileTypeException.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/fileManager/FileFilter.java
-/home/idriss-kamdem/Bureau/M1_SEMESTRE1/MONTHE_4067_UML&DESIGN_PATTERNS/DreamHouse_project/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/utils/FileUrlBuilder.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Config/RabbitMQConfig.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Config/WebConfig.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Controllers/BienImmobilierController.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Controllers/StatistiqueController.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/DTO/BienImmobilierDTO.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/DTO/StatistiqueDTO.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/DreamhouseApplication.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/Adresse.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/BienImmobilier.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/Categorie.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/CategorieBien.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/Region.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/TypeBienImmobilier.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Entities/TypePublication.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Mappers/BienImmobilierMapper.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/PaymentProducer.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/PaymentRequestMessage.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/PaymentStatusConsumer.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/PaymentStatusMessage.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/UserEmailConsumer.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Messaging/UserEmailMessage.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Repositories/BienImmobilierRepository.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/BienImmobilierService.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/BienImmobilierServiceImpl.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/CloudinaryService.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/EmailService.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/FileStorageService.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/Services/StatistiqueService.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/exception/GlobalExceptionHandler.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/exception/PaymentNotSuccessfulException.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/exception/UnsupportedFileTypeException.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/fileManager/FileFilter.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/strategie/ContextePrix.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/strategie/StrategiePrix.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/strategie/StrategiePrixLocation.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/strategie/StrategiePrixVente.java
+/home/idriss-kamdem/Bureau/M1_SEMESTRE2/PROJET UE/publication-service/dreamhouse/src/main/java/com/dreamhousesystem/dreamhouse/utils/FileUrlBuilder.java
