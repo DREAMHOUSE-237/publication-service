@@ -3,7 +3,6 @@ package com.dreamhousesystem.dreamhouse.Mappers;
 import com.dreamhousesystem.dreamhouse.DTO.BienImmobilierDTO;
 import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.Adresse;
-import com.dreamhousesystem.dreamhouse.utils.FileUrlBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,23 +12,13 @@ import java.util.stream.Collectors;
 @Component
 public class BienImmobilierMapper {
 
-    private final FileUrlBuilder fileUrlBuilder;
-
-    public BienImmobilierMapper(FileUrlBuilder fileUrlBuilder) {
-        this.fileUrlBuilder = fileUrlBuilder;
-    }
-
     public BienImmobilierDTO toDTO(BienImmobilier bien) {
         List<String> imageUrls = bien.getImages() != null
-                ? bien.getImages().stream()
-                .map(fileUrlBuilder::buildUrl)
-                .collect(Collectors.toList())
+                ? new ArrayList<>(bien.getImages())
                 : new ArrayList<>();
 
         List<String> documentUrls = bien.getDocuements() != null
-                ? bien.getDocuements().stream()
-                .map(fileUrlBuilder::buildUrl)
-                .collect(Collectors.toList())
+                ? new ArrayList<>(bien.getDocuements())
                 : new ArrayList<>();
 
         return new BienImmobilierDTO(
@@ -45,8 +34,8 @@ public class BienImmobilierMapper {
                 bien.getAdresse() != null ? bien.getAdresse().getQuartier() : null,
                 bien.getAdresse()!= null ? bien.getAdresse().getLattitude(): null,
                 bien.getAdresse()!=null ? bien.getAdresse().getLongitude():null,
-                bien.getTypePublication()!=null ? bien.getTypePublication():null,
-                bien.getTypeBienImmobilier()!=null ? bien.getTypeBienImmobilier():null,
+                bien.getTypePublication(),
+                bien.getTypeBienImmobilier(),
                 bien.getDatePublication(),
                 imageUrls,
                 documentUrls,
@@ -82,3 +71,4 @@ public class BienImmobilierMapper {
         return bien;
     }
 }
+
