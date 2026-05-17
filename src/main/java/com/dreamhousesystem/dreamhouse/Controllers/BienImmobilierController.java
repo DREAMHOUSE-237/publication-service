@@ -1,20 +1,30 @@
 package com.dreamhousesystem.dreamhouse.Controllers;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.dreamhousesystem.dreamhouse.DTO.BienImmobilierDTO;
 import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.CategorieBien;
 import com.dreamhousesystem.dreamhouse.Entities.TypePublication;
 import com.dreamhousesystem.dreamhouse.Services.BienImmobilierService;
-import com.dreamhousesystem.dreamhouse.Services.FileStorageService;
+import com.dreamhousesystem.dreamhouse.Services.CloudinaryService;
 import com.dreamhousesystem.dreamhouse.exception.UnsupportedFileTypeException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/biens")
@@ -22,42 +32,42 @@ import java.util.List;
 public class BienImmobilierController {
 
     private final BienImmobilierService service;
-    private final FileStorageService fileStorageService;
+    private final CloudinaryService cloudinaryService;
 
-    public BienImmobilierController(BienImmobilierService service, FileStorageService fileStorageService) {
+    public BienImmobilierController(BienImmobilierService service, CloudinaryService cloudinaryService) {
         this.service = service;
-        this.fileStorageService = fileStorageService;
+        this.cloudinaryService = cloudinaryService;
     }
 
-    // Creation d’un bien avec images et documents
+
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<BienImmobilierDTO> createBien(
             @RequestPart("bien") BienImmobilier bien,
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
             @RequestPart(value = "documents", required = false) List<MultipartFile> documents) {
 
-        List<String> imageNames = new ArrayList<>();
-        List<String> documentNames = new ArrayList<>();
+        List<String> imageUrls = new ArrayList<>();
+        List<String> documentUrls = new ArrayList<>();
 
         try {
             if (images != null) {
                 for (MultipartFile img : images) {
-                    imageNames.add(fileStorageService.storeFile(img));
+                    imageUrls.add(cloudinaryService.uploadFile(img));
                 }
             }
             if (documents != null) {
                 for (MultipartFile doc : documents) {
-                    documentNames.add(fileStorageService.storeFile(doc));
+                    documentUrls.add(cloudinaryService.uploadFile(doc));
                 }
             }
 
-            bien.setImages(imageNames);
-            bien.setDocuements(documentNames);
+            bien.setImages(imageUrls);
+            bien.setDocuements(documentUrls);
 
             BienImmobilierDTO savedBien = service.createBien(bien);
             return ResponseEntity.ok(savedBien);
 
-        } catch (IOException | UnsupportedFileTypeException e) {
+        } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -76,12 +86,14 @@ public class BienImmobilierController {
         try {
             if (images != null) {
                 for (MultipartFile img : images) {
-                    imageNames.add(fileStorageService.storeFile(img));
+                    imageNames.add(cloudinaryService.uploadFile(img)
+                    );
                 }
             }
             if (documents != null) {
                 for (MultipartFile doc : documents) {
-                    documentNames.add(fileStorageService.storeFile(doc));
+                    documentNames.add(cloudinaryService.uploadFile(doc)
+                    );
                 }
             }
 
@@ -95,6 +107,7 @@ public class BienImmobilierController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBien(@PathVariable int id) {
