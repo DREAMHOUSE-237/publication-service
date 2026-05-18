@@ -1,7 +1,7 @@
 package com.dreamhousesystem.dreamhouse.Messaging;
 
 public class UserEmailMessage {
-    private Long userId;
+    private Long user_auth_id;
     private String email;
     private String region ;
     private String region_display;
@@ -9,18 +9,18 @@ public class UserEmailMessage {
     public UserEmailMessage() {}
 
     public UserEmailMessage(Long userId, String email,String region,String region_display) {
-        this.userId = userId;
+        this.user_auth_id = userId;
         this.email = email;
         this.region=region;
         this.region_display=region_display;
     }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public Long getUserId() { return user_auth_id; }
+    public void setUserId(Long userId) { this.user_auth_id = userId; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
+    public Long getUser_auth_id(){return user_auth_id;}
     public String getRegion(){
         return region;
     }
