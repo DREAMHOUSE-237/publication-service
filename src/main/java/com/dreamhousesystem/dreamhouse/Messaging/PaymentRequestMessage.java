@@ -4,7 +4,7 @@ public class PaymentRequestMessage {
     private String proprietaireEmail;
     private String description;
     private Double prix;
-    private String numeroPaiement; // ✅
+    private String numeroPaiement;
 
     public PaymentRequestMessage() {}
 
