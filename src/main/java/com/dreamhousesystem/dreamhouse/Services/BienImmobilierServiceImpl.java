@@ -200,6 +200,12 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
     }
 
     @Override
+    public List<BienImmobilierDTO> findByRegionCurrent(){
+        String region=userEmailConsumer.getCurrentRegionDisplay();
+       return findByRegion(region);
+    }
+
+    @Override
     public List<BienImmobilierDTO> findByVilleAndPrix(String ville, Double prix) {
         return repository.findByAdresse_VilleAndPrixLessThanEqual(ville, prix)
                 .stream().map(mapper::toDTO).collect(Collectors.toList());

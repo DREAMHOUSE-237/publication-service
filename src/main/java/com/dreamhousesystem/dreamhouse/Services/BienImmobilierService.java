@@ -20,6 +20,7 @@ public interface BienImmobilierService {
     List<BienImmobilierDTO> findByNbrePieceMin(int nbrePiece);
     List<BienImmobilierDTO> findByVille(String ville);
     List<BienImmobilierDTO> findByRegion(String region);
+    List<BienImmobilierDTO> findByRegionCurrent();
     public List<BienImmobilierDTO> finByQuartier(String quartier);
     List<BienImmobilierDTO> findByVilleAndPrix(String ville, Double prix);
     List<BienImmobilierDTO> findByProprietaireEmail(String email);

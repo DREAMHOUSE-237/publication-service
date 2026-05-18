@@ -161,6 +161,11 @@ public class BienImmobilierController {
         return ResponseEntity.ok(service.findByRegion(region));
     }
 
+    @GetMapping("/search/regioncurrent")
+    public ResponseEntity<List<BienImmobilierDTO>> findbyRegionCurrent(){
+        return ResponseEntity.ok(service.findByRegionCurrent());
+    }
+
     @GetMapping("/search/ville-prix")
     public ResponseEntity<List<BienImmobilierDTO>> findByVilleAndPrix(@RequestParam String ville,
                                                                       @RequestParam Double prix) {
