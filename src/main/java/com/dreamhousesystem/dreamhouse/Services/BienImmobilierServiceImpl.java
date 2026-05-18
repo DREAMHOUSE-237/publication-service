@@ -15,7 +15,6 @@ import com.dreamhousesystem.dreamhouse.strategie.ContextePrix;
 import com.dreamhousesystem.dreamhouse.strategie.StrategiePrixVente;
 import com.dreamhousesystem.dreamhouse.strategie.StrategiePrixLocation;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,43 +39,6 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
         this.paymentProducer = paymentProducer;
         this.paymentStatusConsumer = paymentStatusConsumer;
     }
-/*
-    @Override
-    @Transactional
-    public BienImmobilierDTO createBien(BienImmobilier bien) {
-        if (bien.getImages() == null) bien.setImages(new ArrayList<>());
-        if (bien.getDocuements() == null) bien.setDocuements(new ArrayList<>());
-
-        String email = userEmailConsumer.getCurrentUserEmail();
-        bien.setProprietaireEmail(email);
-
-        // Envoyer la requete de paiement AVANT de sauvegarder ne marche pas encore Florinda j'attend
-        paymentProducer.sendPaymentRequest(
-                bien.getProprietaireEmail(),
-                bien.getDescription(),
-                (5 * (bien.getPrix()) / 100),
-                bien.getNumeroPaiement()
-        );
-
-        // Verifier le statut reçu par le consumer
-        String status = paymentStatusConsumer.getCurrentPaymentStatus();
-
-       // if (!"SUCCESSFUL".equalsIgnoreCase(status)) {
-           // throw new PaymentNotSuccessfulException(
-                //    "Paiement refusé ou en attente. Le bien ne peut pas être créé."
-           // );
-       // }
-
-        // Si paiement valide, on persiste le bien n base
-        BienImmobilier savedBien = repository.save(bien);
-        return mapper.toDTO(savedBien);
-
-        // A ajouter : le code pour envoyer le mails de suggestion du nouveau bien a toutes les personnes presentent dans la region de publication
-    }
-*/
-
-
-
 
     @Override
     @Transactional
@@ -87,7 +49,6 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
         String email = userEmailConsumer.getCurrentUserEmail();
         bien.setProprietaireEmail(email);
 
-        // Choisir la stratégie selon le type de publication
         ContextePrix contexte = new ContextePrix();
         switch (bien.getTypePublication()) {
             case VENTE -> contexte.definirStrategie(new StrategiePrixVente());
@@ -98,15 +59,18 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
         double prixFinal = contexte.appliquerStrategie(bien.getPrix());
         System.out.println("Prix calcule avec strategie : " + prixFinal);
 
-        // Exemple : utiliser prixFinal pour calculer les frais de paiement
+        // ✅ FIX : sauvegarder D'ABORD pour obtenir l'id généré en base
+        BienImmobilier bienEnregistre = repository.save(bien);
+
+        // ✅ FIX : envoyer le message APRÈS la sauvegarde avec l'id réel
         paymentProducer.sendPaymentRequest(
-                bien.getProprietaireEmail(),
-                bien.getDescription(),
+                bienEnregistre.getProprietaireEmail(),
+                bienEnregistre.getDescription(),
                 prixFinal,
-                bien.getNumeroPaiement()
+                bienEnregistre.getNumeroPaiement(),
+                bienEnregistre.getId() // ← idPublication maintenant disponible
         );
 
-        BienImmobilier bienEnregistre = repository.save(bien);
         return mapper.toDTO(bienEnregistre);
     }
 
@@ -200,9 +164,9 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
     }
 
     @Override
-    public List<BienImmobilierDTO> findByRegionCurrent(){
-        String region=userEmailConsumer.getCurrentRegionDisplay();
-       return findByRegion(region);
+    public List<BienImmobilierDTO> findByRegionCurrent() {
+        String region = userEmailConsumer.getCurrentRegionDisplay();
+        return findByRegion(region);
     }
 
     @Override

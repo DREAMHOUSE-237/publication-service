@@ -5,14 +5,17 @@ public class PaymentRequestMessage {
     private String description;
     private Double prix;
     private String numeroPaiement;
+    private Integer idPublication; // ← AJOUT
 
     public PaymentRequestMessage() {}
 
-    public PaymentRequestMessage(String proprietaireEmail, String description, Double prix, String numeroPaiement) {
+    public PaymentRequestMessage(String proprietaireEmail, String description,
+                                  Double prix, String numeroPaiement, Integer idPublication) {
         this.proprietaireEmail = proprietaireEmail;
         this.description = description;
         this.prix = prix;
         this.numeroPaiement = numeroPaiement;
+        this.idPublication = idPublication; // ← AJOUT
     }
 
     public String getProprietaireEmail() { return proprietaireEmail; }
@@ -26,4 +29,7 @@ public class PaymentRequestMessage {
 
     public String getNumeroPaiement() { return numeroPaiement; }
     public void setNumeroPaiement(String numeroPaiement) { this.numeroPaiement = numeroPaiement; }
+
+    public Integer getIdPublication() { return idPublication; } // ← AJOUT
+    public void setIdPublication(Integer idPublication) { this.idPublication = idPublication; } // ← AJOUT
 }

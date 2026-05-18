@@ -19,7 +19,7 @@ public class RabbitMQConfig {
         return new Queue("user-email-queue", true);
     }
 
-    // Configuration pour les paiements
+    // ✅ FIX : nom aligné avec PAYMENT_INIT_QUEUE=payment-queue du payment-service
     @Bean
     public Queue paymentQueue() {
         return new Queue("payment-queue", true);
@@ -52,6 +52,6 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue paymentStatusQueue() {
-        return new Queue("payment-status", true); // durable = true
+        return new Queue("payment-status", true);
     }
 }
