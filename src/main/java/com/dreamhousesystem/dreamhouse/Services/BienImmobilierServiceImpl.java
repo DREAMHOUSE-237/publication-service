@@ -9,6 +9,7 @@ import com.dreamhousesystem.dreamhouse.Messaging.PaymentProducer;
 import com.dreamhousesystem.dreamhouse.Messaging.PaymentStatusConsumer;
 import com.dreamhousesystem.dreamhouse.Messaging.UserEmailConsumer;
 import com.dreamhousesystem.dreamhouse.Repositories.BienImmobilierRepository;
+import com.dreamhousesystem.dreamhouse.exception.PaymentNotSuccessfulException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.dreamhousesystem.dreamhouse.strategie.ContextePrix;
@@ -87,7 +88,7 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
         String email = userEmailConsumer.getCurrentUserEmail();
         bien.setProprietaireEmail(email);
 
-        // Choisir la stratégie selon le type de publication
+        // choisir la strategie selon le type de publication
         ContextePrix contexte = new ContextePrix();
         switch (bien.getTypePublication()) {
             case VENTE -> contexte.definirStrategie(new StrategiePrixVente());
@@ -105,6 +106,22 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
                 prixFinal,
                 bien.getNumeroPaiement()
         );
+        // Envoyer la requete de paiement AVANT de sauvegarder ne marche pas encore Florinda j'attend
+        paymentProducer.sendPaymentRequest(
+                bien.getProprietaireEmail(),
+                bien.getDescription(),
+                prixFinal,
+                bien.getNumeroPaiement()
+        );
+
+        // Verifier le statut reçu par le consumer
+        String status = paymentStatusConsumer.getCurrentPaymentStatus();
+
+         if (!"SUCCESSFUL".equalsIgnoreCase(status)) {
+         throw new PaymentNotSuccessfulException(
+            "Paiement refusé ou en attente. Le bien ne peut pas être créé."
+         );
+         }
 
         BienImmobilier bienEnregistre = repository.save(bien);
         return mapper.toDTO(bienEnregistre);
