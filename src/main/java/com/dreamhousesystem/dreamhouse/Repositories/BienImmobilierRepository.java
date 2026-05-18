@@ -2,6 +2,7 @@ package com.dreamhousesystem.dreamhouse.Repositories;
 
 import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.CategorieBien;
+import com.dreamhousesystem.dreamhouse.Entities.StatutPublication;
 import com.dreamhousesystem.dreamhouse.Entities.TypePublication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,35 +11,52 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface BienImmobilierRepository extends JpaRepository<BienImmobilier, Integer> {
 
-    List<BienImmobilier> findByCategorie(@Param("categorie") CategorieBien categorie);
+    // ✅ Toutes les queries publiques filtrent sur ACTIVE uniquement
+    List<BienImmobilier> findByStatutPublication(StatutPublication statut);
 
-    List<BienImmobilier> findByTypePublication(@Param("typePublication") TypePublication typePublication);
+    List<BienImmobilier> findByCategorieAndStatutPublication(
+            @Param("categorie") CategorieBien categorie,
+            @Param("statut") StatutPublication statut);
 
-    List<BienImmobilier> findByPrixLessThanEqual(@Param("prix") Double prix);
+    List<BienImmobilier> findByTypePublicationAndStatutPublication(
+            @Param("typePublication") TypePublication typePublication,
+            @Param("statut") StatutPublication statut);
 
-    List<BienImmobilier> findByNbrePieceGreaterThanEqual(@Param("nbrePiece") int nbrePiece);
+    List<BienImmobilier> findByPrixLessThanEqualAndStatutPublication(
+            @Param("prix") Double prix,
+            @Param("statut") StatutPublication statut);
 
-    List<BienImmobilier> findByAdresse_VilleIgnoreCase(@Param("ville") String ville);
+    List<BienImmobilier> findByNbrePieceGreaterThanEqualAndStatutPublication(
+            @Param("nbrePiece") int nbrePiece,
+            @Param("statut") StatutPublication statut);
 
-    List<BienImmobilier> findByAdresse_Region(@Param("region") String region);
+    List<BienImmobilier> findByAdresse_VilleIgnoreCaseAndStatutPublication(
+            @Param("ville") String ville,
+            @Param("statut") StatutPublication statut);
 
+    List<BienImmobilier> findByAdresse_RegionAndStatutPublication(
+            @Param("region") String region,
+            @Param("statut") StatutPublication statut);
 
-    List<BienImmobilier> findByAdresse_Quartier(@Param("quartier") String quartier);
+    List<BienImmobilier> findByAdresse_QuartierAndStatutPublication(
+            @Param("quartier") String quartier,
+            @Param("statut") StatutPublication statut);
 
+    List<BienImmobilier> findByAdresse_VilleAndPrixLessThanEqualAndStatutPublication(
+            @Param("ville") String ville,
+            @Param("prix") Double prix,
+            @Param("statut") StatutPublication statut);
 
+    // Sans filtre statut → pour les biens du propriétaire (il voit tous ses biens, y compris EN_ATTENTE)
     List<BienImmobilier> findByProprietaireEmailIgnoreCase(@Param("email") String email);
 
-    @Query("SELECT b FROM BienImmobilier b ORDER BY b.datePublication DESC")
+    @Query("SELECT b FROM BienImmobilier b WHERE b.statutPublication = 'ACTIVE' ORDER BY b.datePublication DESC")
     List<BienImmobilier> findRecentPublications();
 
-    List<BienImmobilier> findByAdresse_VilleAndPrixLessThanEqual(@Param("ville") String ville,
-                                                                 @Param("prix") Double prix);
-
-
+    // Stats (inchangées)
     @Query("SELECT b.adresse.ville, COUNT(b) FROM BienImmobilier b GROUP BY b.adresse.ville")
     List<Object[]> countBiensByVille();
 

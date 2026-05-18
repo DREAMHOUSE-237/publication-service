@@ -1,13 +1,13 @@
 package com.dreamhousesystem.dreamhouse.Mappers;
 
 import com.dreamhousesystem.dreamhouse.DTO.BienImmobilierDTO;
-import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.Adresse;
+import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
+import com.dreamhousesystem.dreamhouse.Entities.StatutPublication;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class BienImmobilierMapper {
@@ -32,14 +32,15 @@ public class BienImmobilierMapper {
                 bien.getAdresse() != null ? bien.getAdresse().getVille() : null,
                 bien.getAdresse() != null ? bien.getAdresse().getRegion() : null,
                 bien.getAdresse() != null ? bien.getAdresse().getQuartier() : null,
-                bien.getAdresse()!= null ? bien.getAdresse().getLattitude(): null,
-                bien.getAdresse()!=null ? bien.getAdresse().getLongitude():null,
+                bien.getAdresse() != null ? bien.getAdresse().getLattitude() : null,
+                bien.getAdresse() != null ? bien.getAdresse().getLongitude() : null,
                 bien.getTypePublication(),
                 bien.getTypeBienImmobilier(),
                 bien.getDatePublication(),
                 imageUrls,
                 documentUrls,
-                bien.getNumeroPaiement()
+                bien.getNumeroPaiement(),
+                bien.getStatutPublication()  // ✅ AJOUT
         );
     }
 
@@ -58,6 +59,7 @@ public class BienImmobilierMapper {
         bien.setImages(dto.images());
         bien.setDocuements(dto.docuements());
         bien.setNumeroPaiement(dto.numeroPaiement());
+        // statutPublication non mappé depuis DTO → toujours géré côté serveur uniquement
 
         if (bien.getAdresse() == null) {
             bien.setAdresse(new Adresse());
@@ -71,4 +73,3 @@ public class BienImmobilierMapper {
         return bien;
     }
 }
-

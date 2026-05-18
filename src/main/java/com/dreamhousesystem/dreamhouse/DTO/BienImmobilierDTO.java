@@ -2,8 +2,10 @@ package com.dreamhousesystem.dreamhouse.DTO;
 
 import com.dreamhousesystem.dreamhouse.Entities.CategorieBien;
 import com.dreamhousesystem.dreamhouse.Entities.Region;
+import com.dreamhousesystem.dreamhouse.Entities.StatutPublication;
 import com.dreamhousesystem.dreamhouse.Entities.TypeBienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.TypePublication;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,5 +27,6 @@ public record BienImmobilierDTO(
         LocalDateTime datePublication,
         List<String> images,
         List<String> docuements,
-        String numeroPaiement
+        String numeroPaiement,
+        StatutPublication statutPublication  // ✅ AJOUT
 ) {}

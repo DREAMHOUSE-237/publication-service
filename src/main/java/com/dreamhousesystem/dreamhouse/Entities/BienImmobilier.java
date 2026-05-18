@@ -8,12 +8,13 @@ import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 import java.util.List;
-// initialisation des index sur les champs qui seront trop consultes dans mon service
+
 @Table(
         indexes = {
                 @Index(name = "idx_region", columnList = "region"),
                 @Index(name = "idx_ville", columnList = "ville"),
-                @Index(name = "idx_typePublication", columnList = "typePublication")
+                @Index(name = "idx_typePublication", columnList = "typePublication"),
+                @Index(name = "idx_statutPublication", columnList = "statutPublication") // index pour filtrer facilement
         }
 )
 
@@ -21,12 +22,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BienImmobilier {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = true)
-    private String proprietaireEmail; // il s'agit l'a de l'email du publisher que je vais recevoir du service de Betty pour les statts
+    private String proprietaireEmail;
 
     private String titreBien;
 
@@ -62,10 +64,19 @@ public class BienImmobilier {
     @PrePersist
     protected void onCreate() {
         this.datePublication = LocalDateTime.now();
+        // s'assurer que le statut est toujours EN_ATTENTE à la création
+        if (this.statutPublication == null) {
+            this.statutPublication = StatutPublication.EN_ATTENTE;
+        }
     }
 
     @Enumerated(EnumType.STRING)
     private TypePublication typePublication;
+
+    // ✅ AJOUT : statut de la publication lié au paiement
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatutPublication statutPublication = StatutPublication.EN_ATTENTE;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
@@ -85,9 +96,8 @@ public class BienImmobilier {
     @Fetch(FetchMode.JOIN)
     private List<String> docuements;
 
-
     @Column(nullable = true)
-    private String numeroPaiement; // florinda j'attend ..
+    private String numeroPaiement;
 
     // Getters / Setters
     public int getId() { return id; }
@@ -132,12 +142,10 @@ public class BienImmobilier {
     public String getNumeroPaiement() { return numeroPaiement; }
     public void setNumeroPaiement(String numeroPaiement) { this.numeroPaiement = numeroPaiement; }
 
-    public TypeBienImmobilier getTypeBienImmobilier(){
-        return typeBienImmobilier;
-    }
+    public TypeBienImmobilier getTypeBienImmobilier() { return typeBienImmobilier; }
+    public void setTypeBienImmobilier(TypeBienImmobilier typeBienImmobilier) { this.typeBienImmobilier = typeBienImmobilier; }
 
-    public void setTypeBienImmobilier(TypeBienImmobilier typeBienImmobilier){
-        this.typeBienImmobilier=typeBienImmobilier;
-    }
-
+    // ✅ AJOUT getter/setter statutPublication
+    public StatutPublication getStatutPublication() { return statutPublication; }
+    public void setStatutPublication(StatutPublication statutPublication) { this.statutPublication = statutPublication; }
 }
