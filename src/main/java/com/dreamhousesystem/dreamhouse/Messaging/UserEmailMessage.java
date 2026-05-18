@@ -1,26 +1,28 @@
 package com.dreamhousesystem.dreamhouse.Messaging;
 
+import java.util.UUID;
+
 public class UserEmailMessage {
-    private Long user_auth_id;
+    private UUID user_auth_id;
     private String email;
     private String region ;
     private String region_display;
 
     public UserEmailMessage() {}
 
-    public UserEmailMessage(Long userId, String email,String region,String region_display) {
+    public UserEmailMessage(UUID userId, String email,String region,String region_display) {
         this.user_auth_id = userId;
         this.email = email;
         this.region=region;
         this.region_display=region_display;
     }
 
-    public Long getUserId() { return user_auth_id; }
-    public void setUserId(Long userId) { this.user_auth_id = userId; }
+    public UUID getUserId() { return user_auth_id; }
+    public void setUserId(UUID userId) { this.user_auth_id = userId; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public Long getUser_auth_id(){return user_auth_id;}
+    public UUID getUser_auth_id(){return user_auth_id;}
     public String getRegion(){
         return region;
     }
