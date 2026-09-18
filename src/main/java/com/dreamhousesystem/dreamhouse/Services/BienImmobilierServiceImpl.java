@@ -81,6 +81,37 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
 
     @Override
     @Transactional
+    public BienImmobilierDTO retryPayment(int id, String numeroPaiement) {
+        BienImmobilier bien = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bien non trouvé"));
+
+        bien.setNumeroPaiement(numeroPaiement);
+        bien.setStatutPublication(StatutPublication.EN_ATTENTE);
+        BienImmobilier bienEnregistre = repository.save(bien);
+
+        ContextePrix contexte = new ContextePrix();
+        switch (bienEnregistre.getTypePublication()) {
+            case VENTE -> contexte.definirStrategie(new StrategiePrixVente());
+            case LOCATION -> contexte.definirStrategie(new StrategiePrixLocation());
+            default -> throw new IllegalArgumentException("Type de publication non supporte");
+        }
+        double prixFinal = contexte.appliquerStrategie(bienEnregistre.getPrix());
+
+        // Pas de ré-upload d'images : on relance juste la demande de paiement
+        // pour le bien déjà créé.
+        paymentProducer.sendPaymentRequest(
+                bienEnregistre.getProprietaireEmail(),
+                bienEnregistre.getDescription(),
+                prixFinal,
+                bienEnregistre.getNumeroPaiement(),
+                bienEnregistre.getId()
+        );
+
+        return mapper.toDTO(bienEnregistre);
+    }
+
+    @Override
+    @Transactional
     public BienImmobilierDTO updateBien(int id, BienImmobilier bien) {
         BienImmobilier existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bien non trouvé"));

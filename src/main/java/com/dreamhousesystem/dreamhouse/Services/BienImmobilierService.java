@@ -10,6 +10,7 @@ import java.util.List;
 public interface BienImmobilierService {
     BienImmobilierDTO createBien(BienImmobilier bien);
     BienImmobilierDTO updateBien(int id, BienImmobilier bien);
+    BienImmobilierDTO retryPayment(int id, String numeroPaiement);
     void deleteBien(int id);
     BienImmobilierDTO getBienById(int id);
     List<BienImmobilierDTO> getAllBiens();

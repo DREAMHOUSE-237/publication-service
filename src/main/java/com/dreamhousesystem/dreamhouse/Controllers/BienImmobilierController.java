@@ -3,6 +3,7 @@ package com.dreamhousesystem.dreamhouse.Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -108,6 +110,23 @@ public class BienImmobilierController {
         }
     }
 
+
+    // Relance la demande de paiement pour un bien déjà créé, sans ré-uploader
+    // les images (contrairement à createBien/updateBien qui exigent un
+    // multipart complet).
+    @PostMapping("/{id}/retry-payment")
+    public ResponseEntity<BienImmobilierDTO> retryPayment(
+            @PathVariable int id,
+            @RequestBody Map<String, String> body) {
+
+        String numeroPaiement = body.get("numeroPaiement");
+        if (numeroPaiement == null || numeroPaiement.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        BienImmobilierDTO bien = service.retryPayment(id, numeroPaiement);
+        return ResponseEntity.ok(bien);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBien(@PathVariable int id) {
