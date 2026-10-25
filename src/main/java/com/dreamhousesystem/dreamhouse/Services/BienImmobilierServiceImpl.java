@@ -1,6 +1,7 @@
 package com.dreamhousesystem.dreamhouse.Services;
 
 import com.dreamhousesystem.dreamhouse.DTO.BienImmobilierDTO;
+import com.dreamhousesystem.dreamhouse.DTO.UtilisateurConnecte;
 import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.CategorieBien;
 import com.dreamhousesystem.dreamhouse.Entities.StatutPublication;
@@ -13,8 +14,10 @@ import com.dreamhousesystem.dreamhouse.Repositories.BienImmobilierRepository;
 import com.dreamhousesystem.dreamhouse.strategie.ContextePrix;
 import com.dreamhousesystem.dreamhouse.strategie.StrategiePrixLocation;
 import com.dreamhousesystem.dreamhouse.strategie.StrategiePrixVente;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +46,13 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
 
     @Override
     @Transactional
-    public BienImmobilierDTO createBien(BienImmobilier bien) {
+    public BienImmobilierDTO createBien(BienImmobilier bien, UtilisateurConnecte utilisateur) {
+        exigerConnexion(utilisateur);
         if (bien.getImages() == null) bien.setImages(new ArrayList<>());
         if (bien.getDocuements() == null) bien.setDocuements(new ArrayList<>());
 
-        String email = userEmailConsumer.getCurrentUserEmail();
-        bien.setProprietaireEmail(email);
+        // Le propriétaire est l'auteur de la requête, jamais une valeur du formulaire
+        bien.setProprietaireEmail(utilisateur.email());
 
         // ✅ Statut EN_ATTENTE forcé à la création (aussi géré dans @PrePersist)
         bien.setStatutPublication(StatutPublication.EN_ATTENTE);
@@ -81,9 +85,8 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
 
     @Override
     @Transactional
-    public BienImmobilierDTO retryPayment(int id, String numeroPaiement) {
-        BienImmobilier bien = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bien non trouvé"));
+    public BienImmobilierDTO retryPayment(int id, String numeroPaiement, UtilisateurConnecte utilisateur) {
+        BienImmobilier bien = bienDuProprietaire(id, utilisateur);
 
         bien.setNumeroPaiement(numeroPaiement);
         bien.setStatutPublication(StatutPublication.EN_ATTENTE);
@@ -112,9 +115,8 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
 
     @Override
     @Transactional
-    public BienImmobilierDTO updateBien(int id, BienImmobilier bien) {
-        BienImmobilier existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bien non trouvé"));
+    public BienImmobilierDTO updateBien(int id, BienImmobilier bien, UtilisateurConnecte utilisateur) {
+        BienImmobilier existing = bienDuProprietaire(id, utilisateur);
 
         existing.setSuperfie(bien.getSuperfie());
         existing.setNbrePiece(bien.getNbrePiece());
@@ -125,15 +127,37 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
         existing.setAdresse(bien.getAdresse());
         existing.setImages(bien.getImages() != null ? bien.getImages() : new ArrayList<>());
         existing.setDocuements(bien.getDocuements() != null ? bien.getDocuements() : new ArrayList<>());
-        existing.setProprietaireEmail(userEmailConsumer.getCurrentUserEmail());
-        // ✅ Ne pas toucher au statutPublication lors d'un update
+        // ✅ Ne pas toucher au statutPublication ni au propriétaire lors d'un update
 
         return mapper.toDTO(repository.save(existing));
     }
 
     @Override
-    public void deleteBien(int id) {
-        repository.deleteById(id);
+    public void deleteBien(int id, UtilisateurConnecte utilisateur) {
+        repository.delete(bienDuProprietaire(id, utilisateur));
+    }
+
+    @Override
+    public void verifierProprietaire(int id, UtilisateurConnecte utilisateur) {
+        bienDuProprietaire(id, utilisateur);
+    }
+
+    // Seul le propriétaire du bien (ou un admin) peut le modifier, le supprimer
+    // ou relancer son paiement.
+    private BienImmobilier bienDuProprietaire(int id, UtilisateurConnecte utilisateur) {
+        exigerConnexion(utilisateur);
+        BienImmobilier bien = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bien non trouvé"));
+        if (!utilisateur.estAdmin() && !utilisateur.email().equalsIgnoreCase(bien.getProprietaireEmail())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Ce bien ne vous appartient pas");
+        }
+        return bien;
+    }
+
+    private static void exigerConnexion(UtilisateurConnecte utilisateur) {
+        if (utilisateur == null || !utilisateur.estConnecte()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Veuillez vous connecter");
+        }
     }
 
     @Override
@@ -225,13 +249,10 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
     }
 
     @Override
-    public List<BienImmobilierDTO> findMesBiens() {
-        String userEmail = userEmailConsumer.getCurrentUserEmail();
-        if (userEmail == null) {
-            throw new RuntimeException("Veillez vous connecter pour visualiser vos publications");
-        }
+    public List<BienImmobilierDTO> findMesBiens(UtilisateurConnecte utilisateur) {
+        exigerConnexion(utilisateur);
         // ✅ Le propriétaire voit TOUS ses biens (EN_ATTENTE, ACTIVE, REJETEE)
-        return repository.findByProprietaireEmailIgnoreCase(userEmail)
+        return repository.findByProprietaireEmailIgnoreCase(utilisateur.email())
                 .stream()
                 .map(mapper::toDTO)
                 .collect(Collectors.toList());

@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dreamhousesystem.dreamhouse.DTO.BienImmobilierDTO;
+import com.dreamhousesystem.dreamhouse.DTO.UtilisateurConnecte;
 import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.CategorieBien;
 import com.dreamhousesystem.dreamhouse.Entities.TypePublication;
@@ -46,7 +49,15 @@ public class BienImmobilierController {
     public ResponseEntity<BienImmobilierDTO> createBien(
             @RequestPart("bien") BienImmobilier bien,
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
-            @RequestPart(value = "documents", required = false) List<MultipartFile> documents) {
+            @RequestPart(value = "documents", required = false) List<MultipartFile> documents,
+            @RequestHeader(value = "X-User-Email", required = false) String email,
+            @RequestHeader(value = "X-User-Roles", required = false) String roles) {
+
+        UtilisateurConnecte utilisateur = new UtilisateurConnecte(email, roles);
+        // Avant tout upload Cloudinary : on ne stocke pas les fichiers d'une requête refusée
+        if (!utilisateur.estConnecte()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Veuillez vous connecter");
+        }
 
         List<String> imageUrls = new ArrayList<>();
         List<String> documentUrls = new ArrayList<>();
@@ -66,7 +77,7 @@ public class BienImmobilierController {
             bien.setImages(imageUrls);
             bien.setDocuements(documentUrls);
 
-            BienImmobilierDTO savedBien = service.createBien(bien);
+            BienImmobilierDTO savedBien = service.createBien(bien, utilisateur);
             return ResponseEntity.ok(savedBien);
 
         } catch (IOException e) {
@@ -80,7 +91,12 @@ public class BienImmobilierController {
             @PathVariable int id,
             @RequestPart("bien") BienImmobilier bien,
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
-            @RequestPart(value = "documents", required = false) List<MultipartFile> documents) {
+            @RequestPart(value = "documents", required = false) List<MultipartFile> documents,
+            @RequestHeader(value = "X-User-Email", required = false) String email,
+            @RequestHeader(value = "X-User-Roles", required = false) String roles) {
+
+        UtilisateurConnecte utilisateur = new UtilisateurConnecte(email, roles);
+        service.verifierProprietaire(id, utilisateur);
 
         List<String> imageNames = new ArrayList<>();
         List<String> documentNames = new ArrayList<>();
@@ -102,7 +118,7 @@ public class BienImmobilierController {
             bien.setImages(imageNames);
             bien.setDocuements(documentNames);
 
-            BienImmobilierDTO updatedBien = service.updateBien(id, bien);
+            BienImmobilierDTO updatedBien = service.updateBien(id, bien, utilisateur);
             return ResponseEntity.ok(updatedBien);
 
         } catch (IOException | UnsupportedFileTypeException e) {
@@ -117,20 +133,25 @@ public class BienImmobilierController {
     @PostMapping("/{id}/retry-payment")
     public ResponseEntity<BienImmobilierDTO> retryPayment(
             @PathVariable int id,
-            @RequestBody Map<String, String> body) {
+            @RequestBody Map<String, String> body,
+            @RequestHeader(value = "X-User-Email", required = false) String email,
+            @RequestHeader(value = "X-User-Roles", required = false) String roles) {
 
         String numeroPaiement = body.get("numeroPaiement");
         if (numeroPaiement == null || numeroPaiement.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
 
-        BienImmobilierDTO bien = service.retryPayment(id, numeroPaiement);
+        BienImmobilierDTO bien = service.retryPayment(id, numeroPaiement, new UtilisateurConnecte(email, roles));
         return ResponseEntity.ok(bien);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBien(@PathVariable int id) {
-        service.deleteBien(id);
+    public ResponseEntity<Void> deleteBien(
+            @PathVariable int id,
+            @RequestHeader(value = "X-User-Email", required = false) String email,
+            @RequestHeader(value = "X-User-Roles", required = false) String roles) {
+        service.deleteBien(id, new UtilisateurConnecte(email, roles));
         return ResponseEntity.noContent().build();
     }
 
@@ -203,15 +224,15 @@ public class BienImmobilierController {
         return ResponseEntity.ok(biens);
     }
 
-    // ROUTE POUR LES BIENS DE L'UTILISATEUR CONNECTE (via RabbitMQ)
+    // ROUTE POUR LES BIENS DE L'UTILISATEUR CONNECTE (identifié par le gateway)
     @GetMapping("/mes-publications")
-    public ResponseEntity<List<BienImmobilierDTO>> findMesBiens() {
-        try {
-            List<BienImmobilierDTO> mesBiens = service.findMesBiens();
-            return ResponseEntity.ok(mesBiens);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ArrayList<>());
+    public ResponseEntity<List<BienImmobilierDTO>> findMesBiens(
+            @RequestHeader(value = "X-User-Email", required = false) String email,
+            @RequestHeader(value = "X-User-Roles", required = false) String roles) {
+        UtilisateurConnecte utilisateur = new UtilisateurConnecte(email, roles);
+        if (!utilisateur.estConnecte()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
         }
+        return ResponseEntity.ok(service.findMesBiens(utilisateur));
     }
 }
