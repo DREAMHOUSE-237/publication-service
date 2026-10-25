@@ -1,6 +1,7 @@
 package com.dreamhousesystem.dreamhouse.Services;
 
 import com.dreamhousesystem.dreamhouse.DTO.BienImmobilierDTO;
+import com.dreamhousesystem.dreamhouse.DTO.UtilisateurConnecte;
 import com.dreamhousesystem.dreamhouse.Entities.BienImmobilier;
 import com.dreamhousesystem.dreamhouse.Entities.CategorieBien;
 import com.dreamhousesystem.dreamhouse.Entities.TypePublication;
@@ -8,10 +9,11 @@ import com.dreamhousesystem.dreamhouse.Entities.TypePublication;
 import java.util.List;
 
 public interface BienImmobilierService {
-    BienImmobilierDTO createBien(BienImmobilier bien);
-    BienImmobilierDTO updateBien(int id, BienImmobilier bien);
-    BienImmobilierDTO retryPayment(int id, String numeroPaiement);
-    void deleteBien(int id);
+    BienImmobilierDTO createBien(BienImmobilier bien, UtilisateurConnecte utilisateur);
+    BienImmobilierDTO updateBien(int id, BienImmobilier bien, UtilisateurConnecte utilisateur);
+    BienImmobilierDTO retryPayment(int id, String numeroPaiement, UtilisateurConnecte utilisateur);
+    void deleteBien(int id, UtilisateurConnecte utilisateur);
+    void verifierProprietaire(int id, UtilisateurConnecte utilisateur);
     BienImmobilierDTO getBienById(int id);
     List<BienImmobilierDTO> getAllBiens();
     List<BienImmobilierDTO> getRecentPublications();
@@ -25,5 +27,5 @@ public interface BienImmobilierService {
     public List<BienImmobilierDTO> finByQuartier(String quartier);
     List<BienImmobilierDTO> findByVilleAndPrix(String ville, Double prix);
     List<BienImmobilierDTO> findByProprietaireEmail(String email);
-    List<BienImmobilierDTO> findMesBiens();
+    List<BienImmobilierDTO> findMesBiens(UtilisateurConnecte utilisateur);
 }
